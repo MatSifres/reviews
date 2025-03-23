@@ -32,38 +32,38 @@
         const reviewsSection = document.createElement('div');
         reviewsSection.classList.add('reviews-section');
         reviewsSection.innerHTML = `
-          <h3>Opiniones de clientes</h3>
+          <h3>¿Qué opinan de nosotros?</h3>
           <div class="reviews-container">
             <div class="reviews-slider">
               <div class="review">
                 <div class="stars">★★★★★</div>
-                <h4>Perfecto</h4>
-                <p>Hermosos, no me causan alergia y la verdad que son de excelente calidad</p>
-                <p class="reviewer">Marcela<br>3 días atrás</p>
+                <h4>Amo esta marca</h4>
+                <p>Los productos son de excelente calidad, únicos, elegantes y cancheros. Los aritos que tengo hace ya 4 años siguen dorados.</p>
+                <p class="reviewer">Cecilia Aguilar<br>3 días atrás</p>
               </div>
               <div class="review">
                 <div class="stars">★★★★★</div>
                 <h4>Hermosos</h4>
-                <p>Hermosos los aros, no producen reacción alérgica y son de excelente calidad</p>
-                <p class="reviewer">Adriana Sartori<br>Aros Emilia Gold</p>
-              </div>
-              <div class="review">
-                <div class="stars">★★★★★</div>
-                <h4>Divino</h4>
                 <p>Muy buena calidad y es hermoso. Soy alérgica a todos así que los compré con miedo y no tuve problema!</p>
-                <p class="reviewer">Estefania Giorgis<br>Buenos Aires, Argentina</p>
+                <p class="reviewer">Luisa Aguirre<br>Aros Aria Gold</p>
               </div>
               <div class="review">
                 <div class="stars">★★★★★</div>
-                <h4>Calidad</h4>
-                <p>Hermosos, no me dejaron la oreja roja y son de gran calidad!</p>
-                <p class="reviewer">Adriana Monteresino<br>Aros Conie Silver</p>
+                <h4>Muy lindo el collar</h4>
+                <p>Me encanta comprarles, consumo sus productos desde 2021. La relación precio calidad es buena, ni hablar del diseño que es una locura.</p>
+                <p class="reviewer">Estefania Giorgis<br>Collar Blair Gold</p>
               </div>
               <div class="review">
                 <div class="stars">★★★★★</div>
-                <h4>Hermoso</h4>
-                <p>Gracias me encantó el collar era lo q estaba buscando, que no me cause alergia y q quede bien con un jean y camisa o con algo más de vestir. Hermoso.</p>
-                <p class="reviewer">Silvia Luna Ocampo<br>Collar Luna Gold</p>
+                <h4>Buena experiencia</h4>
+                <p>Todo es un 10/10. La excelente atención desde que una inicia la compra, si hay un inconveniente son resolutivos y jamás se pierda la amabilidad y cortesía durante todo el proceso de compra.</p>
+                <p class="reviewer">Adriana Monteresino<br>Aros Nova Silver</p>
+              </div>
+              <div class="review">
+                <div class="stars">★★★★★</div>
+                <h4>Me encantó el anillo</h4>
+                <p>Muchas gracias por su recomendación, buscaba un anillo específico y me ofrecieron uno similar. Lo uso todos los días y está impecable.</p>
+                <p class="reviewer">Silvia Luna Ocampo<br>Anillo Ayra Gold</p>
               </div>
             </div>
             <div class="pagination-dots"></div>
