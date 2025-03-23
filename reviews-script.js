@@ -1,8 +1,7 @@
 (function () {
-  let hasInjected = false; // Flag to prevent multiple injections
+  let hasInjected = false;
 
   function injectReviews() {
-    // If already injected, exit to prevent duplicates
     if (hasInjected) {
       console.log('Reviews already injected, skipping...');
       return;
@@ -77,6 +76,7 @@
                 <polyline points="9 18 15 12 9 6"></polyline>
               </svg>
             </button>
+            <div class="pagination-dots"></div>
           </div>
         `;
 
@@ -86,7 +86,7 @@
           singleProductDiv.parentNode.insertBefore(reviewsSection, singleProductDiv.nextSibling);
         }
 
-        hasInjected = true; // Set flag to prevent further injections
+        hasInjected = true;
         console.log('Reviews section injected');
 
         const style = document.createElement('style');
@@ -119,6 +119,7 @@
             width: 100%;
             -webkit-user-select: none;
             user-select: none;
+            padding: 0 10px; /* Add padding to show part of the next review */
           }
 
           .review {
@@ -192,11 +193,34 @@
           }
 
           .slider-arrow-left {
-            left: 10px;
+            left: -10px; /* Move outside the slider */
           }
 
           .slider-arrow-right {
-            right: 10px;
+            right: -10px; /* Move outside the slider */
+          }
+
+          .pagination-dots {
+            display: none;
+            text-align: center;
+            margin-top: 10px;
+          }
+
+          .pagination-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            margin: 0 5px;
+            background: #ddd;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s ease;
+          }
+
+          .pagination-dot.active {
+            background: #333;
+            width: 20px;
+            border-radius: 5px;
           }
 
           @media (max-width: 768px) {
@@ -204,10 +228,11 @@
               overflow-x: auto !important;
               scroll-snap-type: x mandatory;
               -webkit-scroll-snap-type: x mandatory;
+              padding: 0 20px; /* Adjust padding to show part of the next review */
             }
 
             .review {
-              flex: 0 0 80% !important;
+              flex: 0 0 calc(100% - 60px) !important; /* Show one review, with part of the next visible */
               scroll-snap-align: start;
             }
 
@@ -215,6 +240,10 @@
               display: flex;
               align-items: center;
               justify-content: center;
+            }
+
+            .pagination-dots {
+              display: block;
             }
           }
 
@@ -233,22 +262,50 @@
         const slider = reviewsSection.querySelector('.reviews-slider');
         const leftArrow = reviewsSection.querySelector('.slider-arrow-left');
         const rightArrow = reviewsSection.querySelector('.slider-arrow-right');
+        const paginationDotsContainer = reviewsSection.querySelector('.pagination-dots');
+        const reviews = reviewsSection.querySelectorAll('.review');
+
+        // Add pagination dots
+        if (paginationDotsContainer && reviews.length > 0) {
+          reviews.forEach((_, index) => {
+            const dot = document.createElement('span');
+            dot.classList.add('pagination-dot');
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => {
+              slider.scrollTo({ left: index * (slider.offsetWidth - 40), behavior: 'smooth' });
+            });
+            paginationDotsContainer.appendChild(dot);
+          });
+        }
 
         if (slider) {
           console.log('Slider found, adding event listeners');
-          slider.addEventListener('scroll', function () {
+
+          // Update pagination dots on scroll
+          slider.addEventListener('scroll', () => {
             const reviews = slider.querySelectorAll('.review');
             reviews.forEach(review => {
               review.style.transition = 'transform 0.3s ease';
             });
+
+            // Calculate the current review index based on scroll position
+            const scrollLeft = slider.scrollLeft;
+            const reviewWidth = slider.offsetWidth - 40; // Adjust for padding
+            const currentIndex = Math.round(scrollLeft / reviewWidth);
+
+            // Update active dot
+            const dots = paginationDotsContainer.querySelectorAll('.pagination-dot');
+            dots.forEach((dot, index) => {
+              dot.classList.toggle('active', index === currentIndex);
+            });
           });
 
           leftArrow.addEventListener('click', () => {
-            slider.scrollBy({ left: -slider.offsetWidth * 0.8, behavior: 'smooth' });
+            slider.scrollBy({ left: -(slider.offsetWidth - 40), behavior: 'smooth' });
           });
 
           rightArrow.addEventListener('click', () => {
-            slider.scrollBy({ left: slider.offsetWidth * 0.8, behavior: 'smooth' });
+            slider.scrollBy({ left: slider.offsetWidth - 40, behavior: 'smooth' });
           });
         } else {
           console.log('Slider not found');
@@ -258,11 +315,4 @@
   }
 
   document.addEventListener('DOMContentLoaded', injectReviews);
-  const observer = new MutationObserver((mutations, observer) => {
-    if (document.querySelector('#single-product') && !hasInjected) {
-      injectReviews();
-      observer.disconnect();
-    }
-  });
-  observer.observe(document.body, { childList: true, subtree: true });
-})();
+  const observer = new MutationObserver((mutations
