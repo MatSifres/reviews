@@ -27,6 +27,13 @@
           singleProductDiv = document.querySelector('.js-product-container') || document.body;
         }
 
+        // Check if reviews section already exists in the DOM
+        if (document.querySelector('.reviews-section')) {
+          console.log('Reviews section already exists in DOM, skipping injection...');
+          hasInjected = true;
+          return;
+        }
+
         console.log('Injecting reviews section...');
 
         const reviewsSection = document.createElement('div');
@@ -77,7 +84,7 @@
         }
 
         hasInjected = true;
-        console.log('Reviews section injected');
+        console.log('Reviews section injected successfully');
 
         const style = document.createElement('style');
         style.textContent = `
@@ -254,12 +261,20 @@
     }, 100);
   }
 
-  document.addEventListener('DOMContentLoaded', injectReviews);
+  // Ensure the MutationObserver stops after injection
   const observer = new MutationObserver((mutations, observer) => {
     if (document.querySelector('#single-product') && !hasInjected) {
+      console.log('MutationObserver triggered, injecting reviews...');
       injectReviews();
-      observer.disconnect();
+      observer.disconnect(); // Stop observing after injection
     }
   });
+
   observer.observe(document.body, { childList: true, subtree: true });
+
+  // Add event listener for DOMContentLoaded
+  document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOMContentLoaded event fired, attempting to inject reviews...');
+    injectReviews();
+  });
 })();
