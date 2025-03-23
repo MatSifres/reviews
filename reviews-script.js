@@ -34,11 +34,6 @@
         reviewsSection.innerHTML = `
           <h3>Opiniones de clientes</h3>
           <div class="reviews-container">
-            <button class="slider-arrow slider-arrow-left" aria-label="Previous review">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="15 18 9 12 15 6"></polyline>
-              </svg>
-            </button>
             <div class="reviews-slider">
               <div class="review">
                 <div class="stars">★★★★★</div>
@@ -71,11 +66,6 @@
                 <p class="reviewer">Silvia Luna Ocampo<br>Collar Luna Gold</p>
               </div>
             </div>
-            <button class="slider-arrow slider-arrow-right" aria-label="Next review">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="9 18 15 12 9 6"></polyline>
-              </svg>
-            </button>
             <div class="pagination-dots"></div>
           </div>
         `;
@@ -95,6 +85,9 @@
             margin: 20px 0;
             padding: 0 15px;
             display: block !important;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
           }
 
           .reviews-section h3 {
@@ -106,7 +99,7 @@
           .reviews-container {
             position: relative;
             width: 100%;
-            overflow: hidden; /* Prevent horizontal scroll outside the container */
+            overflow: hidden;
           }
 
           .reviews-slider {
@@ -120,7 +113,7 @@
             width: 100%;
             -webkit-user-select: none;
             user-select: none;
-            padding: 0 15px; /* Adjusted padding */
+            padding: 0 15px;
           }
 
           .review {
@@ -158,60 +151,17 @@
             font-size: 0.85em;
           }
 
-          .slider-arrow {
-            display: none;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #ffffff;
-            color: #333;
-            border: 1px solid #ddd;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            padding: 0;
-            cursor: pointer;
-            z-index: 10;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: background 0.3s ease, transform 0.3s ease;
-          }
-
-          .slider-arrow:hover,
-          .slider-arrow:focus {
-            background: #f5f5f5;
-            transform: translateY(-50%) scale(1.1);
-          }
-
-          .slider-arrow:active {
-            transform: translateY(-50%) scale(0.95);
-          }
-
-          .slider-arrow svg {
-            width: 20px;
-            height: 20px;
-            display: block;
-            margin: 0 auto;
-          }
-
-          .slider-arrow-left {
-            left: 0; /* Adjusted to sit just outside the review */
-          }
-
-          .slider-arrow-right {
-            right: 0; /* Adjusted to sit just outside the review */
-          }
-
           .pagination-dots {
             display: none;
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
           }
 
           .pagination-dot {
             display: inline-block;
-            width: 10px;
-            height: 10px;
-            margin: 0 5px;
+            width: 8px;
+            height: 8px;
+            margin: 0 4px;
             background: #ddd;
             border-radius: 50%;
             cursor: pointer;
@@ -220,28 +170,26 @@
 
           .pagination-dot.active {
             background: #333;
-            width: 20px;
-            border-radius: 5px;
+            width: 16px;
+            border-radius: 4px;
           }
 
           @media (max-width: 768px) {
+            .reviews-section {
+              padding: 0 10px;
+            }
+
             .reviews-slider {
               overflow-x: auto !important;
               scroll-snap-type: x mandatory;
               -webkit-scroll-snap-type: x mandatory;
-              padding: 0 30px; /* Increased padding to show more of the next review */
+              padding: 0 30px;
             }
 
             .review {
-              flex: 0 0 calc(100% - 90px) !important; /* Adjusted to show one review with part of the next */
+              flex: 0 0 calc(100% - 90px) !important;
               scroll-snap-align: start;
-              margin-right: 10px; /* Add space between reviews */
-            }
-
-            .slider-arrow {
-              display: flex;
-              align-items: center;
-              justify-content: center;
+              margin-right: 10px;
             }
 
             .pagination-dots {
@@ -262,8 +210,6 @@
         document.head.appendChild(style);
 
         const slider = reviewsSection.querySelector('.reviews-slider');
-        const leftArrow = reviewsSection.querySelector('.slider-arrow-left');
-        const rightArrow = reviewsSection.querySelector('.slider-arrow-right');
         const paginationDotsContainer = reviewsSection.querySelector('.pagination-dots');
         const reviews = reviewsSection.querySelectorAll('.review');
 
@@ -300,14 +246,6 @@
             dots.forEach((dot, index) => {
               dot.classList.toggle('active', index === currentIndex);
             });
-          });
-
-          leftArrow.addEventListener('click', () => {
-            slider.scrollBy({ left: -(slider.offsetWidth - 60), behavior: 'smooth' });
-          });
-
-          rightArrow.addEventListener('click', () => {
-            slider.scrollBy({ left: slider.offsetWidth - 60, behavior: 'smooth' });
           });
         } else {
           console.log('Slider not found');
