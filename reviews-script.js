@@ -1,10 +1,18 @@
 (function () {
+  let hasInjected = false; // Flag to prevent multiple injections
+
   function injectReviews() {
+    // If already injected, exit to prevent duplicates
+    if (hasInjected) {
+      console.log('Reviews already injected, skipping...');
+      return;
+    }
+
     console.log('Attempting to inject reviews...');
 
     let singleProductDiv = document.querySelector('#single-product');
     let attempts = 0;
-    const maxAttempts = 20; // Increased attempts for mobile
+    const maxAttempts = 20;
 
     const interval = setInterval(() => {
       singleProductDiv = document.querySelector('#single-product');
@@ -17,7 +25,6 @@
 
         if (!singleProductDiv) {
           console.log('singleProductDiv not found, using fallback injection point');
-          // Fallback: Look for a common product page element or use document.body
           singleProductDiv = document.querySelector('.js-product-container') || document.body;
         }
 
@@ -28,7 +35,11 @@
         reviewsSection.innerHTML = `
           <h3>Opiniones de clientes</h3>
           <div class="reviews-container">
-            <button class="slider-arrow slider-arrow-left" aria-label="Previous review">❮</button>
+            <button class="slider-arrow slider-arrow-left" aria-label="Previous review">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
             <div class="reviews-slider">
               <div class="review">
                 <div class="stars">★★★★★</div>
@@ -61,7 +72,11 @@
                 <p class="reviewer">Silvia Luna Ocampo<br>Collar Luna Gold</p>
               </div>
             </div>
-            <button class="slider-arrow slider-arrow-right" aria-label="Next review">❯</button>
+            <button class="slider-arrow slider-arrow-right" aria-label="Next review">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
           </div>
         `;
 
@@ -71,6 +86,7 @@
           singleProductDiv.parentNode.insertBefore(reviewsSection, singleProductDiv.nextSibling);
         }
 
+        hasInjected = true; // Set flag to prevent further injections
         console.log('Reviews section injected');
 
         const style = document.createElement('style');
@@ -84,6 +100,7 @@
           .reviews-section h3 {
             font-size: 1.5em;
             margin-bottom: 15px;
+            color: #333;
           }
 
           .reviews-container {
@@ -111,6 +128,8 @@
             flex: 0 0 20%;
             box-sizing: border-box;
             scroll-snap-align: start;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
           }
 
           .stars {
@@ -122,16 +141,19 @@
           .review h4 {
             font-size: 1.1em;
             margin: 5px 0;
+            color: #333;
           }
 
           .review p {
             font-size: 0.9em;
             margin: 5px 0;
+            color: #666;
           }
 
           .reviewer {
             font-style: italic;
-            color: #666;
+            color: #999;
+            font-size: 0.85em;
           }
 
           .slider-arrow {
@@ -139,21 +161,42 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.5);
-            color: white;
-            border: none;
-            padding: 10px;
+            background: #ffffff;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            padding: 0;
             cursor: pointer;
             z-index: 10;
-            font-size: 1.5em;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            transition: background 0.3s ease, transform 0.3s ease;
+          }
+
+          .slider-arrow:hover,
+          .slider-arrow:focus {
+            background: #f5f5f5;
+            transform: translateY(-50%) scale(1.1);
+          }
+
+          .slider-arrow:active {
+            transform: translateY(-50%) scale(0.95);
+          }
+
+          .slider-arrow svg {
+            width: 20px;
+            height: 20px;
+            display: block;
+            margin: 0 auto;
           }
 
           .slider-arrow-left {
-            left: 0;
+            left: 10px;
           }
 
           .slider-arrow-right {
-            right: 0;
+            right: 10px;
           }
 
           @media (max-width: 768px) {
@@ -169,7 +212,9 @@
             }
 
             .slider-arrow {
-              display: block;
+              display: flex;
+              align-items: center;
+              justify-content: center;
             }
           }
 
@@ -214,7 +259,7 @@
 
   document.addEventListener('DOMContentLoaded', injectReviews);
   const observer = new MutationObserver((mutations, observer) => {
-    if (document.querySelector('#single-product')) {
+    if (document.querySelector('#single-product') && !hasInjected) {
       injectReviews();
       observer.disconnect();
     }
