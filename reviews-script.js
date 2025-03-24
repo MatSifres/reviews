@@ -2,6 +2,14 @@
   let hasInjectedReviews = false;
   let hasInjectedBanner = false;
 
+  // Función para verificar si estamos en una página de producto
+  function isProductPage() {
+    const currentUrl = window.location.pathname;
+    const isProduct = currentUrl.includes('/productos/');
+    console.log(`Checking if on product page: ${currentUrl} - Is product page: ${isProduct}`);
+    return isProduct;
+  }
+
   // Inyectar los estilos al inicio para que estén disponibles inmediatamente
   const style = document.createElement('style');
   style.textContent = `
@@ -19,8 +27,15 @@
 
     .promo-banner p {
       margin: 0;
-      font-size: 1.1em; /* Igual que el h3 */
+      font-size: 1.5em !important;
       font-weight: 500;
+      line-height: 1.2;
+    }
+
+    @media (max-width: 768px) {
+      .promo-banner p {
+        font-size: 1.2em !important;
+      }
     }
 
     /* Estilos para las reseñas */
@@ -159,6 +174,13 @@
       return;
     }
 
+    // Solo inyectar si estamos en una página de producto
+    if (!isProductPage()) {
+      console.log('Not on a product page, skipping reviews injection...');
+      hasInjectedReviews = true; // Evitar que se intente de nuevo
+      return;
+    }
+
     console.log('Attempting to inject reviews...');
 
     let singleProductDiv = document.querySelector('#single-product');
@@ -175,8 +197,9 @@
         clearInterval(interval);
 
         if (!singleProductDiv) {
-          console.log('singleProductDiv not found, using fallback injection point');
-          singleProductDiv = document.querySelector('.js-product-container') || document.body;
+          console.log('singleProductDiv not found after max attempts, cannot inject reviews');
+          hasInjectedReviews = true; // Evitar que se intente de nuevo
+          return;
         }
 
         if (document.querySelector('.reviews-section')) {
@@ -228,11 +251,8 @@
           </div>
         `;
 
-        if (singleProductDiv === document.body) {
-          singleProductDiv.appendChild(reviewsSection);
-        } else {
-          singleProductDiv.parentNode.insertBefore(reviewsSection, singleProductDiv.nextSibling);
-        }
+        // Solo inyectar en singleProductDiv, no usar document.body como fallback
+        singleProductDiv.parentNode.insertBefore(reviewsSection, singleProductDiv.nextSibling);
 
         hasInjectedReviews = true;
         console.log('Reviews section injected successfully');
@@ -282,6 +302,13 @@
       return;
     }
 
+    // Solo inyectar si estamos en una página de producto
+    if (!isProductPage()) {
+      console.log('Not on a product page, skipping banner injection...');
+      hasInjectedBanner = true; // Evitar que se intente de nuevo
+      return;
+    }
+
     console.log('Attempting to inject banner...');
 
     let addToCartButton = document.querySelector('.js-addtocart');
@@ -299,6 +326,7 @@
 
         if (!addToCartButton) {
           console.log('Add to cart button not found after max attempts, cannot inject banner');
+          hasInjectedBanner = true; // Evitar que se intente de nuevo
           return;
         }
 
@@ -313,7 +341,7 @@
         const banner = document.createElement('div');
         banner.classList.add('promo-banner');
         banner.innerHTML = `
-          <p>SOLO POR HOY: todos los pedidos incluyen un par de aros de regalo</p>
+          <p>Solo por hoy: todos los pedidos incluyen un par de aros de regalo</p>
         `;
 
         addToCartButton.parentNode.insertBefore(banner, addToCartButton);
@@ -326,6 +354,12 @@
 
   // Configurar el MutationObserver para ambas inyecciones
   const observer = new MutationObserver((mutations, observer) => {
+    if (!isProductPage()) {
+      console.log('Not on a product page, disconnecting observer...');
+      observer.disconnect();
+      return;
+    }
+
     if (document.querySelector('#single-product') && !hasInjectedReviews) {
       console.log('MutationObserver triggered, injecting reviews...');
       injectReviews();
@@ -343,15 +377,23 @@
 
   // Ejecutar ambas funciones al cargar la página
   document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOMContentLoaded event fired, attempting to inject reviews and banner...');
-    injectReviews();
-    injectBanner();
+    console.log('DOMContentLoaded event fired, checking if on product page...');
+    if (isProductPage()) {
+      injectReviews();
+      injectBanner();
+    } else {
+      console.log('Not on a product page, skipping injection...');
+    }
   });
 
   // Ejecutar inmediatamente en caso de que el DOM ya esté cargado
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
-    console.log('DOM already loaded, attempting to inject reviews and banner...');
-    injectReviews();
-    injectBanner();
+    console.log('DOM already loaded, checking if on product page...');
+    if (isProductPage()) {
+      injectReviews();
+      injectBanner();
+    } else {
+      console.log('Not on a product page, skipping injection...');
+    }
   }
 })();
