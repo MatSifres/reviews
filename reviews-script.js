@@ -19,7 +19,7 @@
 
     .promo-banner p {
       margin: 0;
-      font-size: 1.3em; /* Igual que el h3 */
+      font-size: 1.1em; /* Igual que el h3 */
       font-weight: 500;
     }
 
