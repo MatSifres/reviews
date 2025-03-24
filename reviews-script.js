@@ -19,7 +19,7 @@
 
     .promo-banner p {
       margin: 0;
-      font-size: 1.5em; /* Igual que el h3 */
+      font-size: 1.3em; /* Igual que el h3 */
       font-weight: 500;
     }
 
@@ -313,7 +313,7 @@
         const banner = document.createElement('div');
         banner.classList.add('promo-banner');
         banner.innerHTML = `
-          <p>Solo por hoy: todos los pedidos incluyen un par de aros de regalo</p>
+          <p>SOLO POR HOY: todos los pedidos incluyen un par de aros de regalo</p>
         `;
 
         addToCartButton.parentNode.insertBefore(banner, addToCartButton);
