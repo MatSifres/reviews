@@ -13,14 +13,14 @@
       border-radius: 8px;
       text-align: center;
       margin-bottom: 10px;
-      font-size: 0.9em;
-      font-weight: 500;
       max-width: 100%;
       box-sizing: border-box;
     }
 
     .promo-banner p {
       margin: 0;
+      font-size: 1.5em; /* Igual que el h3 */
+      font-weight: 500;
     }
 
     /* Estilos para las reseñas */
@@ -163,7 +163,7 @@
 
     let singleProductDiv = document.querySelector('#single-product');
     let attempts = 0;
-    const maxAttempts = 30; // Aumentamos los intentos para dar más tiempo
+    const maxAttempts = 30;
 
     const interval = setInterval(() => {
       singleProductDiv = document.querySelector('#single-product');
@@ -286,7 +286,7 @@
 
     let addToCartButton = document.querySelector('.js-addtocart');
     let attempts = 0;
-    const maxAttempts = 30; // Aumentamos los intentos para dar más tiempo
+    const maxAttempts = 30;
 
     const interval = setInterval(() => {
       addToCartButton = document.querySelector('.js-addtocart');
@@ -302,7 +302,6 @@
           return;
         }
 
-        // Verificar si el cartel ya existe para evitar duplicados
         if (document.querySelector('.promo-banner')) {
           console.log('Promo banner already exists in DOM, skipping injection...');
           hasInjectedBanner = true;
@@ -317,7 +316,6 @@
           <p>Solo por hoy: todos los pedidos incluyen un par de aros de regalo</p>
         `;
 
-        // Insertar el cartel justo antes del botón de agregar al carrito
         addToCartButton.parentNode.insertBefore(banner, addToCartButton);
 
         hasInjectedBanner = true;
