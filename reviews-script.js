@@ -5,7 +5,7 @@
   // Función para verificar si estamos en una página de producto
   function isProductPage() {
     const currentUrl = window.location.pathname;
-    const isProduct = currentUrl.includes('/products/');
+    const isProduct = currentUrl.includes('/productos/');
     console.log(`Checking if on product page: ${currentUrl} - Is product page: ${isProduct}`);
     return isProduct;
   }
