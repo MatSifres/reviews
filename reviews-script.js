@@ -5,7 +5,7 @@
   // Función para verificar si estamos en una página de producto
   function isProductPage() {
     const currentUrl = window.location.pathname;
-    const isProduct = currentUrl.includes('/productos/');
+    const isProduct = currentUrl.includes('/products/');
     console.log(`Checking if on product page: ${currentUrl} - Is product page: ${isProduct}`);
     return isProduct;
   }
@@ -27,15 +27,9 @@
 
     .promo-banner p {
       margin: 0;
-      font-size: 1.5em !important;
+      font-size: 1.1em; /* Ajustar a 1.1em */
       font-weight: 500;
       line-height: 1.2;
-    }
-
-    @media (max-width: 768px) {
-      .promo-banner p {
-        font-size: 1.2em !important;
-      }
     }
 
     /* Estilos para las reseñas */
@@ -177,7 +171,7 @@
     // Solo inyectar si estamos en una página de producto
     if (!isProductPage()) {
       console.log('Not on a product page, skipping reviews injection...');
-      hasInjectedReviews = true; // Evitar que se intente de nuevo
+      hasInjectedReviews = true;
       return;
     }
 
@@ -198,7 +192,7 @@
 
         if (!singleProductDiv) {
           console.log('singleProductDiv not found after max attempts, cannot inject reviews');
-          hasInjectedReviews = true; // Evitar que se intente de nuevo
+          hasInjectedReviews = true;
           return;
         }
 
@@ -251,7 +245,6 @@
           </div>
         `;
 
-        // Solo inyectar en singleProductDiv, no usar document.body como fallback
         singleProductDiv.parentNode.insertBefore(reviewsSection, singleProductDiv.nextSibling);
 
         hasInjectedReviews = true;
@@ -302,10 +295,9 @@
       return;
     }
 
-    // Solo inyectar si estamos en una página de producto
     if (!isProductPage()) {
       console.log('Not on a product page, skipping banner injection...');
-      hasInjectedBanner = true; // Evitar que se intente de nuevo
+      hasInjectedBanner = true;
       return;
     }
 
@@ -326,7 +318,7 @@
 
         if (!addToCartButton) {
           console.log('Add to cart button not found after max attempts, cannot inject banner');
-          hasInjectedBanner = true; // Evitar que se intente de nuevo
+          hasInjectedBanner = true;
           return;
         }
 
