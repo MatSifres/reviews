@@ -333,7 +333,7 @@
         const banner = document.createElement('div');
         banner.classList.add('promo-banner');
         banner.innerHTML = `
-          <p>Solo por hoy: todos los pedidos incluyen un par de aros de regalo</p>
+          <p>Solo por hoy: todos los pedidos incluyen un par de aros aleatorios de regalo - hasta agotar stock</p>
         `;
 
         addToCartButton.parentNode.insertBefore(banner, addToCartButton);
