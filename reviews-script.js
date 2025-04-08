@@ -34,7 +34,7 @@
 
     .promo-banner .countdown {
       display: inline;
-      font-weight: 700; /* Hacer el contador un poco más destacado */
+      font-weight: 700;
     }
 
     /* Estilos para las reseñas */
@@ -166,15 +166,14 @@
   `;
   document.head.appendChild(style);
 
-  // Función para calcular el tiempo restante hasta las 00:00 de Argentina (UTC-3)
+  // Función para calcular el tiempo restante hasta las 00:00 de Argentina (GMT-3)
   function getTimeRemaining() {
     // Obtener la fecha y hora actual en UTC
     const now = new Date();
     
-    // Ajustar a la zona horaria de Argentina (UTC-3)
-    const argentinaOffset = -3 * 60; // UTC-3 en minutos
-    const utcOffset = now.getTimezoneOffset(); // Offset local en minutos
-    const argentinaTime = new Date(now.getTime() + (argentinaOffset - utcOffset) * 60 * 1000);
+    // Convertir a GMT-3 (Argentina)
+    const utcTime = now.getTime() + (now.getTimezoneOffset() * 60 * 1000); // Convertir a UTC
+    const argentinaTime = new Date(utcTime - (3 * 60 * 60 * 1000)); // Ajustar a GMT-3
 
     // Obtener la fecha de mañana a las 00:00 en Argentina
     const tomorrow = new Date(argentinaTime);
@@ -375,7 +374,7 @@
         const banner = document.createElement('div');
         banner.classList.add('promo-banner');
         banner.innerHTML = `
-          <p>Sólo por hoy: 20% de descuento y un par de aros de regalo. <br>Te quedan <span class="countdown">00:00:00</span> para aprovechar la promoción.<br></p>
+          <p>Sólo por hoy: 20% de descuento y un par de aros de regalo. Tenés <span class="countdown">00:00:00</span> para completar tu compra.</p>
         `;
 
         addToCartButton.parentNode.insertBefore(banner, addToCartButton);
@@ -384,8 +383,8 @@
         console.log('Promo banner injected successfully');
 
         // Iniciar el contador regresivo
-        updateCountdown(); // Actualizar inmediatamente
-        setInterval(updateCountdown, 1000); // Actualizar cada segundo
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
       }
     }, 100);
   }
