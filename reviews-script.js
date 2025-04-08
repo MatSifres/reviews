@@ -27,9 +27,14 @@
 
     .promo-banner p {
       margin: 0;
-      font-size: 1.1em; /* Ajustar a 1.1em */
+      font-size: 1.1em;
       font-weight: 500;
       line-height: 1.2;
+    }
+
+    .promo-banner .countdown {
+      display: inline;
+      font-weight: 700; /* Hacer el contador un poco más destacado */
     }
 
     /* Estilos para las reseñas */
@@ -161,6 +166,45 @@
   `;
   document.head.appendChild(style);
 
+  // Función para calcular el tiempo restante hasta las 00:00 de Argentina (UTC-3)
+  function getTimeRemaining() {
+    // Obtener la fecha y hora actual en UTC
+    const now = new Date();
+    
+    // Ajustar a la zona horaria de Argentina (UTC-3)
+    const argentinaOffset = -3 * 60; // UTC-3 en minutos
+    const utcOffset = now.getTimezoneOffset(); // Offset local en minutos
+    const argentinaTime = new Date(now.getTime() + (argentinaOffset - utcOffset) * 60 * 1000);
+
+    // Obtener la fecha de mañana a las 00:00 en Argentina
+    const tomorrow = new Date(argentinaTime);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0); // Medianoche del próximo día
+
+    // Calcular la diferencia en milisegundos
+    const timeDiff = tomorrow - argentinaTime;
+
+    // Convertir a horas, minutos y segundos
+    const hours = Math.floor(timeDiff / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+    return {
+      hours: hours.toString().padStart(2, '0'),
+      minutes: minutes.toString().padStart(2, '0'),
+      seconds: seconds.toString().padStart(2, '0')
+    };
+  }
+
+  // Función para actualizar el contador
+  function updateCountdown() {
+    const countdownElement = document.querySelector('.promo-banner .countdown');
+    if (countdownElement) {
+      const { hours, minutes, seconds } = getTimeRemaining();
+      countdownElement.textContent = `${hours}:${minutes}:${seconds}`;
+    }
+  }
+
   // Función para inyectar las reseñas
   function injectReviews() {
     if (hasInjectedReviews) {
@@ -168,7 +212,6 @@
       return;
     }
 
-    // Solo inyectar si estamos en una página de producto
     if (!isProductPage()) {
       console.log('Not on a product page, skipping reviews injection...');
       hasInjectedReviews = true;
@@ -250,7 +293,6 @@
         hasInjectedReviews = true;
         console.log('Reviews section injected successfully');
 
-        // Configurar el slider de reseñas
         const slider = reviewsSection.querySelector('.reviews-slider');
         const paginationDotsContainer = reviewsSection.querySelector('.pagination-dots');
         const reviews = reviewsSection.querySelectorAll('.review');
@@ -333,13 +375,17 @@
         const banner = document.createElement('div');
         banner.classList.add('promo-banner');
         banner.innerHTML = `
-          <p>Solo por hoy: todos los pedidos incluyen un par de aros aleatorios de regalo - hasta agotar stock</p>
+          <p>Sólo por hoy: 20% de descuento y un par de aros de regalo. Tenés <span class="countdown">00:00:00</span> para completar tu compra.</p>
         `;
 
         addToCartButton.parentNode.insertBefore(banner, addToCartButton);
 
         hasInjectedBanner = true;
         console.log('Promo banner injected successfully');
+
+        // Iniciar el contador regresivo
+        updateCountdown(); // Actualizar inmediatamente
+        setInterval(updateCountdown, 1000); // Actualizar cada segundo
       }
     }, 100);
   }
