@@ -374,7 +374,7 @@
         const banner = document.createElement('div');
         banner.classList.add('promo-banner');
         banner.innerHTML = `
-          <p>Sólo por hoy: 20% de descuento y un par de aros de regalo. <br>Te quedan <span class="countdown">00:00:00</span> para aprovechar la promoción.<br></p>
+          <p>Sólo por hoy: 20% de descuento. <br>Te quedan <span class="countdown">00:00:00</span> para aprovechar la promoción.<br></p>
         `;
 
         addToCartButton.parentNode.insertBefore(banner, addToCartButton);
